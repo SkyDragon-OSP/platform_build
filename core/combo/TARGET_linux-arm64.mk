@@ -132,8 +132,7 @@ TARGET_RELEASE_CFLAGS := \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers \
-			-falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
+			-frename-registers 
 
 libc_root := bionic/libc
 libm_root := bionic/libm

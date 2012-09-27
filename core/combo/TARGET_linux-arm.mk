@@ -74,11 +74,13 @@ $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
-			-DNDDEBUG -pipe \
-			-falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
+                        -funswitch-loops
 
 # Modules can choose to compile some source as thumb.
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -Os -fomit-frame-pointer -DNDEBUG -pipe -funit-at-a-time -fno-strict-aliasing
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS :=  -mthumb \
+                        -Os \
+                        -fomit-frame-pointer \
+                        -fno-strict-aliasing
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -107,7 +109,6 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
 			$(arch_variant_cflags) \
-			-falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1 \
 
 # The "-Wunused-but-set-variable" option often breaks projects that enable
 # "-Wall -Werror" due to a commom idiom "ALOGV(mesg)" where ALOGV is turned
@@ -150,8 +151,7 @@ $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers \
-			-fno-align-functions -falign-loops=1 -fno-align-jumps -fno-align-labels
+			-frename-registers
 
 libc_root := bionic/libc
 libm_root := bionic/libm
