@@ -30,6 +30,7 @@ PRODUCT_PACKAGES := \
 PRODUCT_PACKAGES += \
     Galaxy4 \
     HoloSpiralWallpaper \
+    LockClock \
     LiveWallpapers \
     LiveWallpapersPicker \
     MagicSmokeWallpapers \
