@@ -22,13 +22,13 @@
 # GCC
 
 # General optimization level of target ARM compiled with GCC. Default: -O2
-ARCHIDROID_GCC_CFLAGS_ARM := -O3
+ARCHIDROID_GCC_CFLAGS_ARM := -O2
 
 # General optimization level of target THUMB compiled with GCC. Default: -Os
-ARCHIDROID_GCC_CFLAGS_THUMB := -O3
+ARCHIDROID_GCC_CFLAGS_THUMB := -O2
 
 # Additional flags passed to all C targets compiled with GCC
-ARCHIDROID_GCC_CFLAGS := -O3 -fgcse-las -fgcse-sm -fipa-pta -fivopts -fomit-frame-pointer -frename-registers -fsection-anchors -ftracer -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
+ARCHIDROID_GCC_CFLAGS := -O2 -fgcse-las -fgcse-sm -fipa-pta -fivopts -fomit-frame-pointer -frename-registers -fsection-anchors -ftracer -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations -funswitch-loops -fweb -Wno-error=array-bounds -Wno-error=clobbered -Wno-error=maybe-uninitialized -Wno-error=strict-overflow
 
 ############################
 ### EXPERIMENTAL SECTION ###
@@ -68,7 +68,7 @@ ARCHIDROID_GCC_LDFLAGS := -Wl,--sort-common
 # CLANG
 
 # Flags passed to all C targets compiled with CLANG
-ARCHIDROID_CLANG_CFLAGS := -O3 -Qunused-arguments -Wno-unknown-warning-option
+ARCHIDROID_CLANG_CFLAGS := -O2 -Qunused-arguments -Wno-unknown-warning-option
 
 # Flags passed to all C++ targets compiled with CLANG
 ARCHIDROID_CLANG_CPPFLAGS := $(ARCHIDROID_CLANG_CFLAGS)
