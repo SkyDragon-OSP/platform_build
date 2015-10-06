@@ -148,7 +148,7 @@ class EdifyGenerator(object):
 
   def RunBackup(self, command):
     self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s");' % command))
-      
+
   def FlashSuperSU(self):
     self.script.append('package_extract_dir("supersu", "/tmp/supersu");')
     self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/supersu/supersu.zip", "META-INF/com/google/android/*", "-d", "/tmp/supersu");')
