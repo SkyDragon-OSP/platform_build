@@ -85,8 +85,6 @@ TARGET_GLOBAL_CFLAGS += \
 			-fno-short-enums \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
-			-Wno-pointer-arith \
-			-Wno-unused-parameter\
 			$(arch_variant_cflags) \
 
 # Help catch common 32/64-bit errors.
@@ -94,10 +92,8 @@ TARGET_GLOBAL_CFLAGS += \
     -Werror=pointer-to-int-cast \
     -Werror=int-to-pointer-cast \
     -Werror=implicit-function-declaration \
-    -Wno-error=unused-variable \
-    -Wno-error=pointer-arith
 
-TARGET_GLOBAL_CFLAGS += -fno-strict-volatile-bitfields 
+TARGET_GLOBAL_CFLAGS += -fno-strict-volatile-bitfields
 
 # This is to avoid the dreaded warning compiler message:
 #   note: the mangling of 'va_list' has changed in GCC 4.4
@@ -131,9 +127,11 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
-			-DNDEBUG -pipe \
-			-O3 \
+			-DNDEBUG \
+			-O2 -g \
 			-Wstrict-aliasing=2 \
+			-fgcse-after-reload \
+			-frerun-cse-after-loop \
 			-frename-registers
 
 libc_root := bionic/libc
