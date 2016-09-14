@@ -25,15 +25,15 @@ PRODUCT_PACKAGES += \
     BlockedNumberProvider \
     BookmarkProvider \
     Browser2 \
-#    Calendar \
+    Calendar \
     CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
     Contacts \
-#    DeskClock \
+    DeskClock \
     DocumentsUI \
     DownloadProviderUi \
-#    Email \
+    Email \
     ExactCalculator \
     ExternalStorageProvider \
     FusedLocation \
@@ -41,16 +41,16 @@ PRODUCT_PACKAGES += \
     KeyChain \
     Keyguard \
     LatinIME \
-#    Launcher2 \
+    Launcher2 \
     ManagedProvisioning \
     MtpDocumentsProvider \
-#    PicoTts \
+    PicoTts \
     PacProcessor \
     libpac \
     PrintSpooler \
     PrintRecommendationService \
     ProxyHandler \
-#    QuickSearchBox \
+    QuickSearchBox \
     Settings \
     SharedStorageBackup \
     Telecom \
