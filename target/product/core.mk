@@ -21,11 +21,11 @@
 # core_tiny.mk in addition to core_minimal.mk.
 
 PRODUCT_PACKAGES += \
-    BasicDreams \
+#    BasicDreams \
     BlockedNumberProvider \
-    BookmarkProvider \
-    Browser2 \
-    Calendar \
+#    BookmarkProvider \
+#    Browser2 \
+#    Calendar \
     CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
@@ -44,11 +44,11 @@ PRODUCT_PACKAGES += \
     Launcher2 \
     ManagedProvisioning \
     MtpDocumentsProvider \
-    PicoTts \
+#    PicoTts \
     PacProcessor \
     libpac \
     PrintSpooler \
-    PrintRecommendationService \
+#    PrintRecommendationService \
     ProxyHandler \
     QuickSearchBox \
     Settings \
