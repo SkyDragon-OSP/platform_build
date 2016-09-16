@@ -80,7 +80,28 @@ LOCAL_DISABLE_STRICT := \
 	mm-vdec-omx-test \
 	libc_malloc \
 	mdnsd \
-	libstagefright_webm
+	libstagefright_webm \
+	libc_bionic_ndk \
+	libc_dns \
+	libc_gdtoa \
+	libc_openbsd_ndk \
+	liblog \
+	libc \
+	libbt-brcm_stack \
+	libandroid_runtime \
+	libandroidfw \
+	libosi \
+	libnetlink \
+	clatd \
+	ip \
+	libc_nomalloc \
+	linker \
+	sensors.flounder \
+	libnvvisualizer \
+	libskia \
+	libiprouteutil \
+	libmmcamera_interface \
+	libwifi-service
 
 LOCAL_FORCE_DISABLE_STRICT := \
 	libziparchive-host \
@@ -89,7 +110,28 @@ LOCAL_FORCE_DISABLE_STRICT := \
 	logd \
 	libjavacore \
 	camera.msm8084 \
-	libstagefright_webm
+	libstagefright_webm \
+	libc_bionic_ndk \
+	libc_dns \
+	libc_gdtoa \
+	libc_openbsd_ndk \
+	liblog \
+	libc \
+	libbt-brcm_stack \
+	libandroid_runtime \
+	libandroidfw \
+	libosi \
+	libnetlink \
+	clatd \
+	ip \
+	libc_nomalloc \
+	linker \
+	libc_malloc \
+	sensors.flounder \
+	libnvvisualizer \
+	libiprouteutil \
+	libmmcamera_interface \
+	libwifi-service
 
 DISABLE_STRICT := \
 	-fno-strict-aliasing
@@ -128,21 +170,38 @@ LOCAL_DISABLE_GCCONLY := \
 	libwebviewchromium_loader \
 	libwebviewchromium_plat_support
 
+ifeq (arm,$(TARGET_ARCH))
 GCC_ONLY := \
-	-fira-loop-pressure \
+#	-fira-loop-pressure \
 	-fforce-addr \
-	-funsafe-loop-optimizations \
+#	-funsafe-loop-optimizations \
 	-funroll-loops \
-	-ftree-loop-distribution \
-	-fsection-anchors \
-	-ftree-loop-im \
-	-ftree-loop-ivcanon \
+#	-ftree-loop-distribution \
+#	-fsection-anchors \
+#	-ftree-loop-im \
+#	-ftree-loop-ivcanon \
 	-ffunction-sections \
-	-fgcse-las \
-	-fgcse-sm \
-	-fweb \
+#	-fgcse-las \
+#	-fgcse-sm \
+#	-fweb \
 	-ffp-contract=fast \
 	-mvectorize-with-neon-quad
+else
+GCC_ONLY := \
+#	-fira-loop-pressure \
+	-fforce-addr \
+#	-funsafe-loop-optimizations \
+	-funroll-loops \
+#	-ftree-loop-distribution \
+#	-fsection-anchors \
+#	-ftree-loop-im \
+#	-ftree-loop-ivcanon \
+	-ffunction-sections \
+#	-fgcse-las \
+#	-fgcse-sm \
+#	-fweb \
+	-ffp-contract=fast
+endif
 
 ##########
 # GRAPHITE
@@ -166,14 +225,15 @@ LOCAL_DISABLE_GRAPHITE := \
 	fio \
 	libwebrtc_spl \
 	libpcap \
-	libFraunhoferAAC
+	libFraunhoferAAC \
+	libhwui
 
-GRAPHITE_FLAGS := \
-	-fgraphite \
-	-fgraphite-identity \
-	-floop-flatten \
-	-floop-parallelize-all \
-	-ftree-loop-linear \
-	-floop-interchange \
-	-floop-strip-mine \
-	-floop-block
+#GRAPHITE_FLAGS := \
+#	-fgraphite \
+#	-fgraphite-identity \
+#	-floop-flatten \
+#	-floop-parallelize-all \
+#	-ftree-loop-linear \
+#	-floop-interchange \
+#	-floop-strip-mine \
+#	-floop-block
