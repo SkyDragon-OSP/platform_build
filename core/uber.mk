@@ -176,15 +176,19 @@ GCC_ONLY := \
 	-fforce-addr \
 #	-funsafe-loop-optimizations \
 	-funroll-loops \
-#	-ftree-loop-distribution \
-#	-fsection-anchors \
-#	-ftree-loop-im \
-#	-ftree-loop-ivcanon \
+	-ftree-loop-distribution \
+	-ftree-loop-distribute-patterns \
+	-ftree-slp-vectorize \
+	-fsection-anchors \
+	-ftree-loop-im \
+	-ftree-loop-ivcanon \
 	-ffunction-sections \
-#	-fgcse-las \
-#	-fgcse-sm \
-#	-fweb \
+	-fno-gcse \
+	-fweb \
 	-ffp-contract=fast \
+	-fsched-spec-load \
+	-fsingle-precision-constant \
+	-fpredictive-commoning\
 	-mvectorize-with-neon-quad
 else
 GCC_ONLY := \
@@ -192,15 +196,19 @@ GCC_ONLY := \
 	-fforce-addr \
 #	-funsafe-loop-optimizations \
 	-funroll-loops \
-#	-ftree-loop-distribution \
-#	-fsection-anchors \
-#	-ftree-loop-im \
-#	-ftree-loop-ivcanon \
+	-ftree-loop-distribution \
+	-ftree-loop-distribute-patterns \
+	-ftree-slp-vectorize \
+	-fsection-anchors \
+	-ftree-loop-im \
+	-ftree-loop-ivcanon \
 	-ffunction-sections \
-#	-fgcse-las \
-#	-fgcse-sm \
-#	-fweb \
-	-ffp-contract=fast
+	-fno-gcse \
+	-fweb \
+	-ffp-contract=fast \
+	-fsched-spec-load \
+	-fsingle-precision-constant \
+	-fpredictive-commoning
 endif
 
 ##########
@@ -229,11 +237,12 @@ LOCAL_DISABLE_GRAPHITE := \
 	libhwui
 
 #GRAPHITE_FLAGS := \
-#	-fgraphite \
-#	-fgraphite-identity \
-#	-floop-flatten \
-#	-floop-parallelize-all \
-#	-ftree-loop-linear \
-#	-floop-interchange \
-#	-floop-strip-mine \
-#	-floop-block
+	-fgraphite \
+	-fgraphite-identity \
+	-floop-flatten \
+	-floop-parallelize-all \
+	-ftree-loop-linear \
+	-floop-interchange \
+	-floop-strip-mine \
+	-floop-block \
+	-floop-nest-optimize
