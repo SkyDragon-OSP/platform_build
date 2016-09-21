@@ -74,7 +74,7 @@ TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 TARGET_GLOBAL_CFLAGS += \
     -fno-strict-aliasing \
 
-TARGET_GLOBAL_CFLAGS += \
+TARGET_GLOBAL_CFLAGS += -O3 \
 			-fstack-protector-strong \
 			-ffunction-sections \
 			-fdata-sections \
