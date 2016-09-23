@@ -1519,14 +1519,8 @@ class BlockDifference(object):
           'OTA update");\n'
           'endif;' % (code, partition))
     else:
-      script.Print(" ")
-      script.Print("Verified..")
-
-    if partition == "system":
-      code = ErrorCode.SYSTEM_UNEXPECTED_CONTENTS
-    else:
-      code = ErrorCode.VENDOR_UNEXPECTED_CONTENTS
-
+      script.Print(" ")	
+      script.Print("Verified SkyDragon System files...")
     script.AppendExtra(
         'else\n'
         '  abort("E%d: %s partition has unexpected contents after OTA '
