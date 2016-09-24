@@ -183,7 +183,7 @@ GCC_ONLY := \
 	-ftree-loop-im \
 	-ftree-loop-ivcanon \
 	-ffunction-sections \
-	-fno-gcse \
+	-fgcse -fgcse-lm -fgcse-sm -fgcse-las \
 	-fweb \
 	-ffp-contract=fast \
 	-fsched-spec-load \
@@ -203,7 +203,7 @@ GCC_ONLY := \
 	-ftree-loop-im \
 	-ftree-loop-ivcanon \
 	-ffunction-sections \
-	-fno-gcse \
+	-fgcse -fgcse-lm -fgcse-sm -fgcse-las \
 	-fweb \
 	-ffp-contract=fast \
 	-fsched-spec-load \
