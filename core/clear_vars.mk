@@ -1,3 +1,4 @@
+
 ###########################################################
 ## Clear out values of all variables used by rule templates.
 ###########################################################
@@ -158,7 +159,6 @@ LOCAL_CTS_TEST_RUNNER:=
 LOCAL_CLANG:=
 LOCAL_SDCLANG:=
 LOCAL_SDCLANG_LTO:=
-LOCAL_SDCLANG_EXTRA_FLAGS_32:=
 LOCAL_SDCLANG_LTO_UNSAFE_FILTER:=
 LOCAL_JAR_EXCLUDE_FILES:=
 LOCAL_JAR_PACKAGES:=
