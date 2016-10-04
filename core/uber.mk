@@ -185,6 +185,7 @@ GCC_ONLY := \
 	-ffunction-sections \
 	-fgcse -fgcse-lm -fgcse-sm -fgcse-las \
 	-fweb \
+	-DNDDEBUG -pipe \
 	-ffp-contract=fast \
 	-fsched-spec-load \
 	-fsingle-precision-constant \
@@ -205,6 +206,7 @@ GCC_ONLY := \
 	-ffunction-sections \
 	-fgcse -fgcse-lm -fgcse-sm -fgcse-las \
 	-fweb \
+	-DNDDEBUG -pipe \
 	-ffp-contract=fast \
 	-fsched-spec-load \
 	-fsingle-precision-constant \
