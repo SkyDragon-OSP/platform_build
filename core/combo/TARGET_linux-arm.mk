@@ -74,7 +74,19 @@ $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
-                        -funswitch-loops
+                        -funswitch-loops \
+                        -fira-loop-pressure \
+						-fforce-addr \
+						-funroll-loops \
+						-ftree-loop-distribution \
+						-ftree-slp-vectorize \
+						-fsection-anchors \
+						-ftree-loop-im \
+						-ftree-loop-ivcanon \
+						-ffunction-sections \
+						-fgcse-after-reload \
+						-DNDDEBUG -pipe \
+						-ffp-contract=fast 
 
 # Modules can choose to compile some source as thumb.
 ifeq ($(STRICT_ALIASING),true)
@@ -152,7 +164,23 @@ $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers
+			-frename-registers \
+			-fomit-frame-pointer \
+            -fstrict-aliasing    \
+            -funswitch-loops \
+            -fira-loop-pressure \
+			-fforce-addr \
+			-funroll-loops \
+			-ftree-loop-distribution \
+			-ftree-slp-vectorize \
+			-fsection-anchors \
+			-ftree-loop-im \
+			-ftree-loop-ivcanon \
+			-ffunction-sections \
+			-fgcse-after-reload \
+			-DNDDEBUG -pipe \
+			-ffp-contract=fast \
+			-fno-partial-inlining 
 
 libc_root := bionic/libc
 libm_root := bionic/libm

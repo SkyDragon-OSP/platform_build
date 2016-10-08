@@ -178,19 +178,26 @@ GCC_ONLY := \
 	-funroll-loops \
 	-ftree-loop-distribution \
 	-ftree-loop-distribute-patterns \
+	-ftree-loop-vectorize \
 	-ftree-slp-vectorize \
 	-fsection-anchors \
 	-ftree-loop-im \
 	-ftree-loop-ivcanon \
 	-ffunction-sections \
 	-fgcse -fgcse-lm -fgcse-sm -fgcse-las \
+	-fgcse-after-reload \
 	-fweb \
 	-DNDDEBUG -pipe \
 	-ffp-contract=fast \
 	-fsched-spec-load \
 	-fsingle-precision-constant \
-	-fpredictive-commoning\
-	-mvectorize-with-neon-quad
+	-fpredictive-commoning \
+	-mvectorize-with-neon-quad \
+	-fno-reorder-blocks-and-partition \
+	-fno-reorder-blocks-algorithm=stc \
+	-fno-partial-inlining \
+	-fno-reorder-functions
+			
 else
 GCC_ONLY := \
 #	-fira-loop-pressure \
@@ -199,18 +206,25 @@ GCC_ONLY := \
 	-funroll-loops \
 	-ftree-loop-distribution \
 	-ftree-loop-distribute-patterns \
+	-ftree-loop-vectorize \
 	-ftree-slp-vectorize \
 	-fsection-anchors \
 	-ftree-loop-im \
 	-ftree-loop-ivcanon \
 	-ffunction-sections \
 	-fgcse -fgcse-lm -fgcse-sm -fgcse-las \
+	-fgcse-after-reload \
 	-fweb \
 	-DNDDEBUG -pipe \
 	-ffp-contract=fast \
 	-fsched-spec-load \
 	-fsingle-precision-constant \
-	-fpredictive-commoning
+	-fpredictive-commoning \
+	-fno-reorder-blocks-and-partition \
+	-fno-reorder-blocks-algorithm=stc \
+	-fno-partial-inlining \
+	-fno-reorder-functions
+			
 endif
 
 ##########
