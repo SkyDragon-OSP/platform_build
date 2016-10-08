@@ -7,6 +7,7 @@ ARFLAGS := crsD
 # For 32 bit
 $(LOCAL_BUILT_MODULE) : $(combo_2nd_arch_prefix)TARGET_AR := $(AR)
 $(LOCAL_BUILT_MODULE) : $(combo_var_prefix)GLOBAL_ARFLAGS := $(ARFLAGS)
+LOCAL_BUILT_MODULE := $(intermediates)/$(my_built_module_stem)
 
 # For 64 bit
 intermediates := $(call local-intermediates-dir,,$(LOCAL_2ND_ARCH_VAR_PREFIX))
