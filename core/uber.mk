@@ -196,7 +196,7 @@ GCC_ONLY := \
 	-fno-reorder-blocks-and-partition \
 	-fno-reorder-blocks-algorithm=stc \
 	-fno-partial-inlining \
-	-fno-reorder-functions
+	-fno-reorder-functions -fno-align-functions -fno-align-loops
 			
 else
 GCC_ONLY := \
@@ -223,7 +223,7 @@ GCC_ONLY := \
 	-fno-reorder-blocks-and-partition \
 	-fno-reorder-blocks-algorithm=stc \
 	-fno-partial-inlining \
-	-fno-reorder-functions
+	-fno-reorder-functions -fno-align-functions -fno-align-loops
 			
 endif
 

@@ -24,9 +24,9 @@ RS_LLVM_LINK := $(RS_LLVM_PREBUILTS_PATH)/llvm-link$(BUILD_EXECUTABLE_SUFFIX)
 # Clang flags for all host or target rules
 CLANG_CONFIG_EXTRA_ASFLAGS :=
 ifeq ($(CLANG_O3),true)
-CLANG_CONFIG_EXTRA_CFLAGS := -O2 -Qunused-arguments -Wno-unknown-warning-option
-CLANG_CONFIG_EXTRA_CONLYFLAGS := -O2 -std=gnu99 -DNDDEBUG -pipe
-CLANG_CONFIG_EXTRA_CPPFLAGS := -O2 -Qunused-arguments -Wno-unknown-warning-option -D__compiler_offsetof=__builtin_offsetof
+CLANG_CONFIG_EXTRA_CFLAGS := -O3 -Qunused-arguments -Wno-unknown-warning-option
+CLANG_CONFIG_EXTRA_CONLYFLAGS := -O3 -std=gnu99 -DNDDEBUG -pipe
+CLANG_CONFIG_EXTRA_CPPFLAGS := -O3 -Qunused-arguments -Wno-unknown-warning-option -D__compiler_offsetof=__builtin_offsetof
 CLANG_CONFIG_EXTRA_LDFLAGS := -Wl,--sort-common
 else
 CLANG_CONFIG_EXTRA_CFLAGS :=
