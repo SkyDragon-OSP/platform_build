@@ -85,8 +85,8 @@ TARGET_GLOBAL_CFLAGS += -O2 \
 			-fno-short-enums \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
-			$(arch_variant_cflags) \
-
+			$(arch_variant_cflags) 
+			
 # Help catch common 32/64-bit errors.
 TARGET_GLOBAL_CFLAGS += \
     -Werror=pointer-to-int-cast \
@@ -130,9 +130,23 @@ TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
 			-O2 \
 			-Wstrict-aliasing=2 \
-			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers
+			-frename-registers \
+			-fomit-frame-pointer \
+            -fstrict-aliasing    \
+            -funswitch-loops \
+            -fira-loop-pressure \
+			-fforce-addr \
+			-funroll-loops \
+			-ftree-loop-distribution \
+			-ftree-slp-vectorize \
+			-fsection-anchors \
+			-ftree-loop-im \
+			-ftree-loop-ivcanon \
+			-ffunction-sections \
+			-fgcse-after-reload \
+			-DNDDEBUG -pipe \
+			-ffp-contract=fast  
 
 libc_root := bionic/libc
 libm_root := bionic/libm
