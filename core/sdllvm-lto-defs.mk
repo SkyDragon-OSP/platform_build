@@ -6,7 +6,7 @@ ARFLAGS := crsD
 
 # For 32 bit
 $(LOCAL_BUILT_MODULE) : $(combo_2nd_arch_prefix)TARGET_AR := $(AR)
-$(LOCAL_BUILT_MODULE) : $(combo_var_prefix)GLOBAL_ARFLAGS := $(ARFLAGS)
+$(LOCAL_BUILT_MODULE) : $(combo_var_prefix)GLOBAL_ARFLAGS := $(ARFLAGS) -O4 -fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels
 LOCAL_BUILT_MODULE := $(intermediates)/$(my_built_module_stem)
 
 # For 64 bit
@@ -14,7 +14,7 @@ intermediates := $(call local-intermediates-dir,,$(LOCAL_2ND_ARCH_VAR_PREFIX))
 LOCAL_BUILT_MODULE_64 := $(intermediates)/$(my_built_module_stem)
 
 $(LOCAL_BUILT_MODULE_64) : TARGET_AR := $(AR)
-$(LOCAL_BUILT_MODULE_64) : TARGET_GLOBAL_ARFLAGS := $(ARFLAGS) -O4 -fno-align-functions -fno-align-loops
+$(LOCAL_BUILT_MODULE_64) : TARGET_GLOBAL_ARFLAGS := $(ARFLAGS) -O4 -fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels
 
 else
 # For SHARED_LIBRARIES and EXECUTABLES we need to filter out flags not

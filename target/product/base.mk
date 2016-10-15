@@ -129,7 +129,7 @@ PRODUCT_PACKAGES += \
     vold \
     wm
 
-ifneq ($(filter uber_flounder uber_hammerhead uber_shamu,$(TARGET_PRODUCT)),)
+ifneq ($(filter sd_flounder sd_hammerhead sd_shamu,$(TARGET_PRODUCT)),)
 PRODUCT_PACKAGES += \
     libdrmclearkeyplugin 
 endif

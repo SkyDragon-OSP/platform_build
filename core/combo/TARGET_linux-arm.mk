@@ -75,24 +75,19 @@ $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops \
-                        -fira-loop-pressure \
 						-fforce-addr \
 						-funroll-loops \
-						-ftree-loop-distribution \
 						-ftree-slp-vectorize \
-						-fsection-anchors \
-						-ftree-loop-im \
-						-ftree-loop-ivcanon \
 						-ffunction-sections \
 						-fgcse-after-reload \
 						-DNDDEBUG -pipe \
-						-ffp-contract=fast 
+						-ffp-contract=fast -fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels
 
 # Modules can choose to compile some source as thumb.
 ifeq ($(STRICT_ALIASING),true)
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -O2 -fomit-frame-pointer
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -O2 -fomit-frame-pointer -fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels
 else
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -O2 -fomit-frame-pointer -fno-strict-aliasing
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -O2 -fomit-frame-pointer -fno-strict-aliasing -fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels
 endif
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
@@ -122,6 +117,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
 			$(arch_variant_cflags) \
+			-fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels \
 
 # The "-Wunused-but-set-variable" option often breaks projects that enable
 # "-Wall -Werror" due to a commom idiom "ALOGV(mesg)" where ALOGV is turned
@@ -161,26 +157,11 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 # More flags/options can be added here
 $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
+			-g \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers \
-			-fomit-frame-pointer \
-            -fstrict-aliasing    \
-            -funswitch-loops \
-            -fira-loop-pressure \
-			-fforce-addr \
-			-funroll-loops \
-			-ftree-loop-distribution \
-			-ftree-slp-vectorize \
-			-fsection-anchors \
-			-ftree-loop-im \
-			-ftree-loop-ivcanon \
-			-ffunction-sections \
-			-fgcse-after-reload \
-			-DNDDEBUG -pipe \
-			-ffp-contract=fast \
-			-fno-partial-inlining 
+			-frename-registers -fno-align-functions -fno-align-loops -fno-align-jumps -fno-align-labels
 
 libc_root := bionic/libc
 libm_root := bionic/libm

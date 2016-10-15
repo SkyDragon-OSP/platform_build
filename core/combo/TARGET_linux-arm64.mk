@@ -128,25 +128,21 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
-			-O2 \
+			-O2 -g \
 			-Wstrict-aliasing=2 \
+			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers \
 			-fomit-frame-pointer \
-            -fstrict-aliasing    \
-            -funswitch-loops \
-            -fira-loop-pressure \
+            		-fstrict-aliasing \
+            		-funswitch-loops \
 			-fforce-addr \
 			-funroll-loops \
-			-ftree-loop-distribution \
 			-ftree-slp-vectorize \
-			-fsection-anchors \
-			-ftree-loop-im \
-			-ftree-loop-ivcanon \
 			-ffunction-sections \
 			-fgcse-after-reload \
 			-DNDDEBUG -pipe \
-			-ffp-contract=fast  
+			-ffp-contract=fast -fno-align-functions -fno-align-loops
 
 libc_root := bionic/libc
 libm_root := bionic/libm
