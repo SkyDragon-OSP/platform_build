@@ -171,7 +171,7 @@ LOCAL_DISABLE_GCCONLY := \
 	libwebviewchromium_plat_support
 
 ifeq (arm,$(TARGET_ARCH))
-GCC_ONLY := \
+GCC_ONLY := -O3 \
 	-ftree-slp-vectorize \
 	-ffunction-sections \
 	-DNDDEBUG -pipe \
@@ -180,7 +180,7 @@ GCC_ONLY := \
 	-fno-align-functions -fno-align-loops
 			
 else
-GCC_ONLY := \
+GCC_ONLY := -O3 \
 	-ftree-slp-vectorize \
 	-ffunction-sections \
 	-DNDDEBUG -pipe \
