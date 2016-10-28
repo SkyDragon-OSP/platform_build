@@ -371,16 +371,14 @@ ifdef LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)
 my_clang := $(strip $(LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)))
 endif
 
-my_sdclang := $(strip $(LOCAL_SDCLANG))
-
 # clang is enabled by default for host builds
 # enable it unless we've specifically disabled clang above
 ifdef LOCAL_IS_HOST_MODULE
-    ifneq ($($(my_prefix)OS),windows)
+  ifneq ($($(my_prefix)OS),windows)
     ifeq ($(my_clang),)
         my_clang := true
     endif
-    endif
+  endif
 # Add option to make gcc the default for device build
 else ifeq ($(USE_CLANG_PLATFORM_BUILD),false)
     ifeq ($(my_clang),)
@@ -414,12 +412,27 @@ endif
 
 my_cppflags := $(my_cpp_std_version) $(my_cppflags)
 
+my_sdclang := $(strip $(LOCAL_SDCLANG))
 
 ifeq ($(SDCLANG),true)
     ifeq ($(my_sdclang),)
         my_sdclang := true
     endif
 endif
+
+ifeq ($(my_sdclang),true)
+  ifneq ($(HOST_OS),linux)
+    $(warning ****************************************************************)
+    $(warning * SDCLANG is not supported on non-linux hosts. Disabling...)
+    $(warning ****************************************************************)
+    my_sdclang := false
+    ifeq ($(SDCLANG_FORCED),true)
+      $(error $(LOCAL_PATH): SDCLANG_FORCED was triggered! You are not allowed to build without SDCLANG while it is enabled... Dying...)
+    endif
+  endif
+endif
+
+include $(BUILD_SYSTEM)/uber.mk
 
 # arch-specific static libraries go first so that generic ones can depend on them
 my_static_libraries := $(LOCAL_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_static_libraries)
@@ -770,7 +783,7 @@ endif
 
 # Turn on all warnings and warnings as errors for RS compiles.
 # This can be disabled with LOCAL_RENDERSCRIPT_FLAGS := -Wno-error
-renderscript_flags := -Wall -Werror
+# renderscript_flags := -Wall -Werror
 renderscript_flags += $(LOCAL_RENDERSCRIPT_FLAGS)
 # -m32 or -m64
 renderscript_flags += -m$(my_32_64_bit_suffix)
