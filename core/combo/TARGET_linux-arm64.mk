@@ -85,7 +85,7 @@ TARGET_GLOBAL_CFLAGS += -O2 \
 			-fno-short-enums \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
-			$(arch_variant_cflags) 
+			$(arch_variant_cflags)
 			
 # Help catch common 32/64-bit errors.
 TARGET_GLOBAL_CFLAGS += \
@@ -141,7 +141,7 @@ TARGET_RELEASE_CFLAGS := \
 			-ffunction-sections \
 			-fgcse-after-reload \
 			-DNDDEBUG -pipe \
-			-ffp-contract=fast -falign-functions=1 -falign-loops=16
+			-ffp-contract=fast -falign-functions=1 -falign-loops=16 -fno-align-jumps -falign-labels=1
 
 libc_root := bionic/libc
 libm_root := bionic/libm

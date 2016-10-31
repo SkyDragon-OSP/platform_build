@@ -191,7 +191,7 @@ GCC_ONLY := -O3 \
 	-DNDDEBUG -pipe \
 	-ffp-contract=fast \
 	-mvectorize-with-neon-quad \
-	-falign-functions=1 -falign-loops=16 -falign-jumps=1 -falign-labels=1
+	-falign-functions=1 -falign-loops=16 -falign-labels=1
 			
 else
 GCC_ONLY := -O3 \
@@ -199,7 +199,7 @@ GCC_ONLY := -O3 \
 	-ffunction-sections \
 	-DNDDEBUG -pipe \
 	-ffp-contract=fast \
-	-falign-functions=1 -falign-loops=16 -falign-jumps=1 -falign-labels=1
+	-falign-functions=1 -falign-loops=16 -falign-labels=1
 			
 endif
 
