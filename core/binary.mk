@@ -526,19 +526,12 @@ my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_LD
         my_target_global_cflags += $(SDCLANG_COMMON_FLAGS) $(SDCLANG_PRECONFIGURED_FLAGS)
         SDCLANG_PRECONFIGURED_FLAGS :=
 
-        SDCLANG_PRECONFIGURED_FLAGS += -fuse-ld=qcld -flto
-        my_target_global_ldflags += -fuse-ld=qcld -flto $(LOCAL_SDCLANG_LTO_LDFLAGS)
-      endif
-    endif
-
-    my_target_global_cflags += $(SDCLANG_COMMON_FLAGS) $(SDCLANG_PRECONFIGURED_FLAGS)
-    SDCLANG_PRECONFIGURED_FLAGS :=
-
-    ifeq ($(strip $(my_cc)),)
-      my_cc := $(my_cc_wrapper) $(SDCLANG_PATH)/clang
-    endif
-    ifeq ($(strip $(my_cxx)),)
-      my_cxx := $(my_cxx_wrapper) $(SDCLANG_PATH)/clang++
+        ifeq ($(strip $(my_cc)),)
+            my_cc := $(SDCLANG_PATH)/clang
+        endif
+        ifeq ($(strip $(my_cxx)),)
+            my_cxx := $(SDCLANG_PATH)/clang++
+        endif
     endif
 else
 my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_GLOBAL_CFLAGS)
