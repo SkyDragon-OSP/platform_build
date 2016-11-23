@@ -74,7 +74,7 @@ TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 TARGET_GLOBAL_CFLAGS += \
     -fno-strict-aliasing \
 
-TARGET_GLOBAL_CFLAGS += -O2 \
+TARGET_GLOBAL_CFLAGS += -O3 -DNDEBUG -pipe \
 			-fstack-protector-strong \
 			-ffunction-sections \
 			-fdata-sections \
@@ -126,22 +126,20 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
-			-DNDEBUG \
-			-O2 \
+			-DNDEBUG -pipe -funit-at-a-time \
+			-O3 \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers \
 			-fomit-frame-pointer \
             -fstrict-aliasing \
-            -funswitch-loops \
+            -funroll-loops -funswitch-loops -fprefetch-loop-arrays \
 			-fforce-addr \
-			-funroll-loops \
 			-ftree-slp-vectorize \
 			-ffunction-sections \
 			-fgcse-after-reload \
-			-DNDDEBUG -pipe \
-			-ffp-contract=fast -falign-functions=1 -falign-loops=16 -fno-align-jumps -falign-labels=1
+			-ffp-contract=fast -falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
 
 libc_root := bionic/libc
 libm_root := bionic/libm
