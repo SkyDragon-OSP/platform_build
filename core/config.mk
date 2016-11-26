@@ -467,7 +467,7 @@ AAPT := $(HOST_OUT_EXECUTABLES)/aapt
 AAPT2 := $(HOST_OUT_EXECUTABLES)/aapt2
 ZIPALIGN := $(HOST_OUT_EXECUTABLES)/zipalign
 SIGNAPK_JAR := $(HOST_OUT_JAVA_LIBRARIES)/signapk$(COMMON_JAVA_PACKAGE_SUFFIX)
-SIGNAPK_JNI_LIBRARY_PATH := $(HOST_OUT_SHARED_LIBRARIES)
+export SIGNAPK_JNI_LIBRARY_PATH := $(HOST_OUT_SHARED_LIBRARIES)
 LLVM_RS_CC := $(HOST_OUT_EXECUTABLES)/llvm-rs-cc
 BCC_COMPAT := $(HOST_OUT_EXECUTABLES)/bcc_compat
 
@@ -491,13 +491,17 @@ USE_PREBUILT_SDK_TOOLS_IN_PLACE := true
 
 # Override the definitions above for unbundled and PDK builds
 ifneq (,$(TARGET_BUILD_APPS)$(filter true,$(TARGET_BUILD_PDK)))
+prebuilt_sdk_tools := prebuilts/sdk/tools
+prebuilt_sdk_tools_bin := $(prebuilt_sdk_tools)/$(HOST_OS)/bin
+
+ACP := $(prebuilt_sdk_tools_bin)/acp
 AIDL := $(prebuilt_sdk_tools_bin)/aidl
 AAPT := $(prebuilt_sdk_tools_bin)/aapt
 AAPT2 := $(prebuilt_sdk_tools_bin)/aapt2
 ZIPALIGN := $(prebuilt_sdk_tools_bin)/zipalign
 SIGNAPK_JAR := $(prebuilt_sdk_tools)/lib/signapk$(COMMON_JAVA_PACKAGE_SUFFIX)
 # Use 64-bit libraries unconditionally because 32-bit JVMs are no longer supported
-SIGNAPK_JNI_LIBRARY_PATH := $(prebuilt_sdk_tools)/$(HOST_OS)/lib64
+export SIGNAPK_JNI_LIBRARY_PATH := $(prebuilt_sdk_tools)/$(HOST_OS)/lib64
 
 DX := $(prebuilt_sdk_tools)/dx
 MAINDEXCLASSES := $(prebuilt_sdk_tools)/mainDexClasses
@@ -586,6 +590,13 @@ FUTILITY := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/futility/futility
 VBOOT_SIGNER := prebuilts/misc/scripts/vboot_signer/vboot_signer.sh
 FEC := $(HOST_OUT_EXECUTABLES)/fec
 
+ifndef TARGET_BUILD_APPS
+ZIPTIME := $(HOST_OUT_EXECUTABLES)/ziptime$(HOST_EXECUTABLE_SUFFIX)
+endif
+
+# ijar converts a .jar file to a smaller .jar file which only has its
+# interfaces.
+IJAR := $(HOST_OUT_EXECUTABLES)/ijar$(BUILD_EXECUTABLE_SUFFIX)
 DEXDUMP := $(HOST_OUT_EXECUTABLES)/dexdump2$(BUILD_EXECUTABLE_SUFFIX)
 
 # relocation packer
@@ -667,7 +678,6 @@ GLOBAL_CFLAGS_NO_OVERRIDE := \
 
 GLOBAL_CLANG_CFLAGS_NO_OVERRIDE := \
     -Werror=address-of-temporary \
-    -Werror=null-dereference \
     -Werror=return-type \
 
 GLOBAL_CPPFLAGS_NO_OVERRIDE :=

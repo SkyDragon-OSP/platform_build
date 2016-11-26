@@ -85,8 +85,8 @@ TARGET_GLOBAL_CFLAGS += -O3 -DNDEBUG -pipe \
 			-fno-short-enums \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
-			$(arch_variant_cflags)
-			
+			$(arch_variant_cflags) \
+
 # Help catch common 32/64-bit errors.
 TARGET_GLOBAL_CFLAGS += \
     -Werror=pointer-to-int-cast \
@@ -114,6 +114,7 @@ TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--fatal-warnings \
 			-Wl,-maarch64linux \
 			-Wl,--hash-style=gnu \
+			-Wl,--fix-cortex-a53-843419 \
 			-fuse-ld=gold \
 			-Wl,--icf=safe \
 			-Wl,--no-undefined-version \
@@ -132,14 +133,7 @@ TARGET_RELEASE_CFLAGS := \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers \
-			-fomit-frame-pointer \
-            -fstrict-aliasing \
-            -funroll-loops -funswitch-loops -fprefetch-loop-arrays \
-			-fforce-addr \
-			-ftree-slp-vectorize \
-			-ffunction-sections \
-			-fgcse-after-reload \
-			-ffp-contract=fast -falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
+			-falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
 
 libc_root := bionic/libc
 libm_root := bionic/libm

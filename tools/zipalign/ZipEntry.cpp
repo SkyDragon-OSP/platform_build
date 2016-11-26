@@ -23,11 +23,10 @@
 #include "ZipEntry.h"
 #include <utils/Log.h>
 
-#include <assert.h>
-#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
+#include <assert.h>
+#include <inttypes.h>
 
 using namespace android;
 

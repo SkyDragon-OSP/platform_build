@@ -46,7 +46,7 @@ class Options(object):
     self.signapk_shared_library_path = "lib64"   # Relative to search_path
     self.extra_signapk_args = []
     self.java_path = "java"  # Use the one on the path by default.
-    self.java_args = ["-Xmx2048m"]  # The default JVM args.
+    self.java_args = "-Xmx2048m" # JVM Args
     self.public_key_suffix = ".x509.pem"
     self.private_key_suffix = ".pk8"
     # use otatools built boot_signer by default
@@ -711,10 +711,11 @@ def SignFile(input_name, output_name, key, password, min_api_level=None,
   java_library_path = os.path.join(
       OPTIONS.search_path, OPTIONS.signapk_shared_library_path)
 
-  cmd = ([OPTIONS.java_path] + OPTIONS.java_args +
-         ["-Djava.library.path=" + java_library_path,
-          "-jar", os.path.join(OPTIONS.search_path, OPTIONS.signapk_path)] +
-         OPTIONS.extra_signapk_args)
+  cmd = [OPTIONS.java_path, OPTIONS.java_args,
+         "-Djava.library.path=" + java_library_path,
+         "-jar",
+         os.path.join(OPTIONS.search_path, OPTIONS.signapk_path)]
+  cmd.extend(OPTIONS.extra_signapk_args)
   if whole_file:
     cmd.append("-w")
 
@@ -870,7 +871,7 @@ def ParseOptions(argv,
     elif o in ("--java_path",):
       OPTIONS.java_path = a
     elif o in ("--java_args",):
-      OPTIONS.java_args = shlex.split(a)
+      OPTIONS.java_args = a
     elif o in ("--public_key_suffix",):
       OPTIONS.public_key_suffix = a
     elif o in ("--private_key_suffix",):
@@ -1514,8 +1515,7 @@ class BlockDifference(object):
       script.AppendExtra('if range_sha1("%s", "%s") == "%s" then' % (
                          self.device, ranges_str,
                          self._HashZeroBlocks(self.tgt.extended.size())))
-      script.Print(" ")
-      script.Print("Verified..")
+      script.Print('Verified the updated %s image.' % (partition,))
       if partition == "system":
         code = ErrorCode.SYSTEM_NONZERO_CONTENTS
       else:

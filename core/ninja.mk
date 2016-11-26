@@ -1,8 +1,4 @@
-ifeq ($(filter address,$(SANITIZE_HOST)),)
-NINJA ?= prebuilts/build-tools/$(HOST_PREBUILT_TAG)/bin/ninja
-else
-NINJA ?= prebuilts/build-tools/$(HOST_PREBUILT_TAG)/asan/bin/ninja
-endif
+NINJA ?= prebuilts/ninja/$(HOST_PREBUILT_TAG)/ninja
 
 ifeq ($(USE_SOONG),true)
 USE_SOONG_FOR_KATI := true

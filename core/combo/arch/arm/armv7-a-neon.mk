@@ -50,14 +50,5 @@ endif
 local_arch_has_lpae :=
 
 arch_variant_cflags += \
-    -mfloat-abi=softfp
-
-ifneq (,$(filter cortex-a7 cortex-a15 krait,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
-	arch_variant_cflags += -mfpu=neon-vfpv4
-else
-ifneq (,$(filter cortex-a53 cortex-a53.a57 kryo denver,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
-        arch_variant_cflags += -mfpu=neon-fp-armv8
-else
-	arch_variant_cflags += -mfpu=neon
-endif
-endif
+    -mfloat-abi=softfp \
+    -mfpu=neon

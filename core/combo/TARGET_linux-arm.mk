@@ -74,20 +74,12 @@ $(combo_2nd_arch_prefix)TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 $(combo_2nd_arch_prefix)TARGET_arm_CFLAGS :=    -O3 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
-                        -funroll-loops -funswitch-loops -fprefetch-loop-arrays \
-						-fforce-addr \
-						-ftree-slp-vectorize \
-						-ffunction-sections \
-						-fgcse-after-reload \
-						-DNDDEBUG -pipe \
-						-ffp-contract=fast -falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
+                        -funroll-loops -funswitch-loops \
+			-DNDDEBUG -pipe \
+			-falign-functions=1 -falign-loops=1 -fno-align-jumps -falign-labels=1
 
 # Modules can choose to compile some source as thumb.
-ifeq ($(STRICT_ALIASING),true)
-$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -Os -fomit-frame-pointer -DNDEBUG -pipe -funit-at-a-time
-else
 $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS := -mthumb -Os -fomit-frame-pointer -DNDEBUG -pipe -funit-at-a-time -fno-strict-aliasing
-endif
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -161,14 +153,7 @@ $(combo_2nd_arch_prefix)TARGET_RELEASE_CFLAGS := \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers \
-			-fomit-frame-pointer \
-            -fstrict-aliasing \
-            -funroll-loops -funswitch-loops -fprefetch-loop-arrays \
-			-fforce-addr \
-			-ftree-slp-vectorize \
-			-ffunction-sections \
-			-fgcse-after-reload \
-			-ffp-contract=fast -fno-align-functions -falign-loops=1 -fno-align-jumps -fno-align-labels
+			-fno-align-functions -falign-loops=1 -fno-align-jumps -fno-align-labels
 
 libc_root := bionic/libc
 libm_root := bionic/libm

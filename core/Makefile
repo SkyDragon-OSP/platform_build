@@ -1,6 +1,11 @@
 # Put some miscellaneous rules here
 
 # Build system colors
+
+ifneq ($(USE_NINJA),false)
+  BUILD_WITH_COLORS := 0
+endif
+
 #
 # PFX: Prefix "target C++:" in yellow
 # INS: Module "Install:" output color (cyan for ics)
@@ -8,12 +13,12 @@
 ifneq ($(BUILD_WITH_COLORS),0)
   CL_PFX="\033[33m"
   CL_INS="\033[36m"
-  CL_RED="\033[31m"
-  CL_GRN="\033[32m"
-  CL_YLW="\033[33m"
-  CL_BLU="\033[34m"
-  CL_MAG="\033[35m"
-  CL_CYN="\033[36m"
+  CL_RED="-e \033[31m"
+  CL_GRN="-e \033[32m"
+  CL_YLW="-e \033[33m"
+  CL_BLU="-e \033[34m"
+  CL_MAG="-e \033[35m"
+  CL_CYN="-e \033[36m"
   CL_RST="\033[0m"
 endif
 
@@ -263,7 +268,7 @@ endif
 			TARGET_CPU_ABI="$(TARGET_CPU_ABI)" \
 			TARGET_CPU_ABI2="$(TARGET_CPU_ABI2)" \
 			TARGET_AAPT_CHARACTERISTICS="$(TARGET_AAPT_CHARACTERISTICS)" \
-			$(PRODUCT_BUILD_PROP_OVERRIDES) \
+      $(PRODUCT_BUILD_PROP_OVERRIDES) \
 	        bash $(BUILDINFO_SH) >> $@
 	$(hide) $(foreach file,$(system_prop_file), \
 		if [ -f "$(file)" ]; then \
@@ -562,7 +567,6 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOT_S
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	$(BOOT_SIGNER) /boot $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE))
-
 	@echo -e ${CL_CYN}"Made boot image: $@"${CL_RST}
 
 .PHONY: bootimage-nodeps
@@ -593,7 +597,6 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE))
-
 	@echo -e ${CL_CYN}"Made boot image: $@"${CL_RST}
 
 .PHONY: bootimage-nodeps
@@ -601,7 +604,7 @@ bootimage-nodeps: $(MKBOOTIMG)
 	@echo "make $@: ignoring dependencies"
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(INSTALLED_BOOTIMAGE_TARGET)
 	$(hide) $(call assert-max-image-size,$(INSTALLED_BOOTIMAGE_TARGET),$(BOARD_BOOTIMAGE_PARTITION_SIZE))
-	@echo -e ${CL_CYN}"Made boot image: $@"${CL_RST}
+	@echo -e ${CL_INS}"Made boot image: $@"${CL_RST}
 
 endif # TARGET_BOOTIMAGE_USE_EXT2
 endif # BOARD_USES_RECOVERY_AS_BOOT
@@ -708,7 +711,7 @@ endif  # TARGET_BUILD_APPS
 $(kernel_notice_file): \
 	    $(BUILD_SYSTEM)/LINUX_KERNEL_COPYING \
 	    | $(ACP)
-	@echo Copying: $@
+	@echo -e ${CL_CYN}"Copying:"${CL_RST}" $@"
 	$(hide) mkdir -p $(dir $@)
 	$(hide) $(ACP) $< $@
 
@@ -1101,8 +1104,17 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
     $(PDK_FUSION_SYSIMG_FILES) \
     $(RECOVERY_RESOURCE_ZIP))
 
+systemimage-squisher: $(INTERNAL_SYSTEMIMAGE_FILES)
+	@echo -e ${CL_YLW}"Optimizing PNGs to Shrink ROM Size!"${CL_RST}
+	$(hide) APKCERTS=$(APKCERTS_FILE) $(SQUISHER_SCRIPT) $@
 
+ifeq ($(NO_SQUISHER),)
+.PHONY: systemimage-squisher
+FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS) systemimage-squisher
+else
 FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEPS)
+endif
+
 # -----------------------------------------------------------------
 # installed file list
 # Depending on anything that $(BUILT_SYSTEMIMAGE) depends on.
@@ -1184,7 +1196,7 @@ $(RECOVERY_FROM_BOOT_PATCH): $(INSTALLED_RECOVERYIMAGE_TARGET) \
                              $(INSTALLED_BOOTIMAGE_TARGET) \
 			     $(HOST_OUT_EXECUTABLES)/imgdiff \
 	                     $(HOST_OUT_EXECUTABLES)/bsdiff
-	-e ${CL_CYN}"Construct recovery from boot"${CL_RST}
+	@echo -e ${CL_CYN}"Construct recovery from boot"${CL_RST}
 	mkdir -p $(dir $@)
 	PATH=$(HOST_OUT_EXECUTABLES):$$PATH $(HOST_OUT_EXECUTABLES)/imgdiff $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_RECOVERYIMAGE_TARGET) $@
 else # $(BOARD_USES_FULL_RECOVERY_IMAGE) == true
@@ -1998,7 +2010,7 @@ name := $(name)-$(shell date +"%Y-%m-%d")
 INTERNAL_UPDATE_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
 $(INTERNAL_UPDATE_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
-	@echo "Package: $@"
+	@echo -e ${CL_YLW}"Package:"${CL_RST}" $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	   ./build/tools/releasetools/img_from_target_files -v \
 	   -p $(HOST_OUT) \
@@ -2109,6 +2121,7 @@ INTERNAL_EMULATOR_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 $(INTERNAL_EMULATOR_PACKAGE_TARGET): $(INTERNAL_EMULATOR_PACKAGE_FILES)
 	@echo -e ${CL_YLW}"Package:"${CL_RST}" $@"
 	$(hide) zip -qjX $@ $(INTERNAL_EMULATOR_PACKAGE_FILES)
+
 endif
 # -----------------------------------------------------------------
 # Old PDK stuffs, retired

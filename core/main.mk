@@ -207,7 +207,6 @@ $(info $(space))
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)https://source.android.com/source/initializing.html)
 $(info ************************************************************)
-$(error stop)
 endif
 
 # Check for the current JDK.
@@ -228,7 +227,6 @@ $(info ************************************************************)
 $(info You asked for an OpenJDK based build but your version is)
 $(info $(java_version_str).)
 $(info ************************************************************)
-$(error stop)
 endif # java version is not OpenJdk
 else # if requires_openjdk
 ifneq ($(shell echo '$(java_version_str)' | grep -i openjdk),)
@@ -239,7 +237,6 @@ $(info You use OpenJDK but only Sun/Oracle JDK is supported.)
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)https://source.android.com/source/download.html)
 $(info ************************************************************)
-$(error stop)
 endif # java version is not Sun Oracle JDK
 endif # if requires_openjdk
 
@@ -266,7 +263,6 @@ $(info $(space))
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)https://source.android.com/source/download.html)
 $(info ************************************************************)
-$(error stop)
 endif
 
 endif # if JAVA_NOT_REQUIRED
@@ -1104,7 +1100,7 @@ $(foreach module,$(sample_MODULES),$(eval $(call \
 sample_ADDITIONAL_INSTALLED := \
         $(filter-out $(modules_to_install) $(modules_to_check) $(ALL_PREBUILT),$(sample_MODULES))
 samplecode: $(sample_APKS_COLLECTION)
-	@echo -e ${CL_GRN}"Collect sample code apks:"${CL_RST}" $^"
+	@echo ${CL_GRN}"Collect sample code apks:"${CL_RST}" $^"
 	# remove apks that are not intended to be installed.
 	rm -f $(sample_ADDITIONAL_INSTALLED)
 endif  # samplecode in $(MAKECMDGOALS)
@@ -1115,7 +1111,7 @@ findbugs: $(INTERNAL_FINDBUGS_HTML_TARGET) $(INTERNAL_FINDBUGS_XML_TARGET)
 .PHONY: clean
 clean:
 	@rm -rf $(OUT_DIR)/*
-	@echo -e ${CL_GRN}"Entire build directory removed."${CL_RST}
+	@echo ${CL_GRN}"Entire build directory removed."${CL_RST}
 
 .PHONY: clobber
 clobber: clean
@@ -1125,7 +1121,7 @@ clobber: clean
 #xxx scrape this from ALL_MODULE_NAME_TAGS
 .PHONY: modules
 modules:
-	@echo -e ${CL_GRN}"Available sub-modules:"${CL_RST}
+	@echo ${CL_GRN}"Available sub-modules:"${CL_RST}
 	@echo "$(call module-names-for-tag-list,$(ALL_MODULE_TAGS))" | \
 	      tr -s ' ' '\n' | sort -u | $(COLUMN)
 
