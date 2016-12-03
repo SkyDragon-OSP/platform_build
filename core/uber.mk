@@ -16,6 +16,7 @@
 ###################
 # Strict Aliasing #
 ###################
+
 LOCAL_DISABLE_STRICT := \
 	libpdfiumfpdfapi \
 	mdnsd \
@@ -31,6 +32,16 @@ STRICT_ALIASING_FLAGS := \
 STRICT_GCC_LEVEL := 
 
 STRICT_CLANG_LEVEL := 
+
+# GCC Tunings
+#############
+
+GCC_ONLY := \
+	-ftree-slp-vectorize \
+	-ffunction-sections \
+	-DNDDEBUG -pipe \
+	-ffp-contract=fast \
+	-fno-align-functions -fno-align-jumps -fno-align-loops -fno-align-labels
 
 ############
 # GRAPHITE #
@@ -51,23 +62,12 @@ GRAPHITE_FLAGS := \
 	-floop-block \
 	-floop-nest-optimize
 
-ifeq ($(GRAPHITE_OPTS),true)
-  ifneq (1,$(words $(filter $(LOCAL_DISABLE_GRAPHITE),$(LOCAL_MODULE))))
-    ifneq ($(my_clang),true)
-      ifneq ($(my_sdclang),true)
-        my_cflags += $(GRAPHITE_FLAGS)
-      endif
-    endif
-  endif
-endif
-
-
 #########
 # POLLY #
 #########
 
 # Polly flags for use with Clang
- POLLY := -mllvm -polly \
+POLLY := -mllvm -polly \
 	 -mllvm -polly-parallel -lgomp \
 	 -mllvm -polly-run-inliner \
 	 -mllvm -polly-opt-fusion=max \
@@ -100,7 +100,7 @@ DISABLE_POLLY_O3 := \
 DISABLE_POLLY_arm := \
 	libandroid \
 	libcrypto \
-    libcrypto_static \
+        libcrypto_static \
 	libFraunhoferAAC \
 	libjpeg_static \
 	libLLVM% \
@@ -128,7 +128,7 @@ my_cflags := $(filter-out -Wall -Werror -g -Wextra -Weverything,$(my_cflags))
 ifneq (1,$(words $(filter $(DISABLE_POLLY_O3),$(LOCAL_MODULE))))
   # Remove all other "O" flags to set O3
   my_cflags := $(filter-out -O3 -O2 -Os -O1 -O0 -Og -Oz,$(my_cflags))
-  my_cflags += -O3
+  my_cflags += -O2
 else
   my_cflags += -O2
 endif
@@ -148,16 +148,17 @@ ifeq ($(my_sdclang), true)
 endif
 
 ifeq ($(LOCAL_CLANG),false)
-  my_cflags += -Wno-unknown-warning
+  my_cflags += $(GCC_ONLY) -Wno-unknown-warning
 endif
 
 ifeq ($(STRICT_ALIASING),true)
   # Remove the no-strict-aliasing flags
+  my_cflags := $(filter-out -funswitch-loops,$(my_cflags))
   ifneq (1,$(words $(filter $(LOCAL_DISABLE_STRICT),$(LOCAL_MODULE))))
     ifneq ($(LOCAL_CLANG),false)
       my_cflags += $(STRICT_ALIASING_FLAGS) $(STRICT_CLANG_LEVEL)
     else
-      my_cflags += $(STRICT_ALIASING_FLAGS) $(STRICT_GCC_LEVEL)
+      my_cflags += $(STRICT_ALIASING_FLAGS) $(STRICT_GCC_LEVEL) $(GCC_ONLY)
     endif
   endif
 endif

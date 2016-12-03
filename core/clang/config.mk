@@ -74,6 +74,7 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -floop-flatten \
   -floop-parallelize-all \
   -ftree-loop-linear \
+  -Wno-unknown-warning \
   -floop-nest-optimize \
   -floop-interchange \
   -floop-strip-mine \
