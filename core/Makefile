@@ -1196,7 +1196,7 @@ $(RECOVERY_FROM_BOOT_PATCH): $(INSTALLED_RECOVERYIMAGE_TARGET) \
                              $(INSTALLED_BOOTIMAGE_TARGET) \
 			     $(HOST_OUT_EXECUTABLES)/imgdiff \
 	                     $(HOST_OUT_EXECUTABLES)/bsdiff
-	@echo -e ${CL_CYN}"Construct recovery from boot"${CL_RST}
+	@echo "Construct recovery from boot"
 	mkdir -p $(dir $@)
 	PATH=$(HOST_OUT_EXECUTABLES):$$PATH $(HOST_OUT_EXECUTABLES)/imgdiff $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_RECOVERYIMAGE_TARGET) $@
 else # $(BOARD_USES_FULL_RECOVERY_IMAGE) == true
@@ -1206,7 +1206,7 @@ endif
 
 
 $(INSTALLED_SYSTEMIMAGE): $(BUILT_SYSTEMIMAGE) $(RECOVERY_FROM_BOOT_PATCH) | $(ACP)
-	@echo -e ${CL_CYN}"Install system fs image: $@"${CL_RST}
+	@echo "Install system fs image: $@"
 	$(copy-file-to-target)
 	$(hide) $(call assert-max-image-size,$@ $(RECOVERY_FROM_BOOT_PATCH),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE))
 
@@ -1416,6 +1416,8 @@ INSTALLED_USERDATATARBALL_TARGET := $(userdata_tar).bz2
 $(INSTALLED_USERDATATARBALL_TARGET): PRIVATE_USERDATA_TAR := $(userdata_tar)
 $(INSTALLED_USERDATATARBALL_TARGET): $(FS_GET_STATS) $(INTERNAL_USERDATAIMAGE_FILES)
 	$(build-userdatatarball-target)
+
+$(call dist-for-goals,userdatatarball,$(INSTALLED_USERDATATARBALL_TARGET))
 
 .PHONY: userdatatarball-nodeps
 userdatatarball-nodeps: $(FS_GET_STATS)
@@ -2086,7 +2088,7 @@ PROGUARD_DICT_ZIP := $(PRODUCT_OUT)/$(TARGET_PRODUCT)-proguard-dict-$(FILE_NAME_
 # the dependency will be set up later in build/core/main.mk.
 $(PROGUARD_DICT_ZIP) :
 	@echo "Packaging Proguard obfuscation dictionary files."
-	$(hide) dict_files=`find $(TARGET_OUT_COMMON_INTERMEDIATES)/APPS -name proguard_dictionary`; \
+	$(hide) dict_files=`find $(TARGET_OUT_COMMON_INTERMEDIATES)/APPS -name proguard_dictionary -o -name jack_dictionary`; \
 		if [ -n "$$dict_files" ]; then \
 		  unobfuscated_jars=$${dict_files//proguard_dictionary/classes.jar}; \
 		  zip -qX $@ $$dict_files $$unobfuscated_jars; \
