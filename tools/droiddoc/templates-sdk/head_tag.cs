@@ -126,13 +126,8 @@ if:devsite ?>
         elif:stories ?>/stories<?cs
         elif:analyze ?>/analyze<?cs
         else ?><?cs /if ?><?cs
-      elif:(about||versions||wear||tv||auto) ?><?cs
-        if:versions ?>/about/versions<?cs
-        elif:wear ?>/wear<?cs
-        elif:tv ?>/tv<?cs
-        elif:auto ?>/auto<?cs
-        else ?>/about<?cs /if ?><?cs
-      elif:wearpreview ?>/wear/preview<?cs
+      elif:(about||versions||wear||tv||auto) ?>/about<?cs
+      elif:wearpreview ?>/wear<?cs
       elif:work ?>/work<?cs
       elif:preview ?>/preview<?cs
       elif:design ?>/design<?cs /if ?>/_project.yaml" /><?cs
@@ -154,9 +149,6 @@ if:devsite ?>
       /if ?><?cs
       if:page.image ?>
   <meta name="image_path" value='<?cs var:page.image ?>' /><?cs
-      /if ?><?cs
-      if:excludeFromSuggestions ?>
-  <meta name="hide_from_search_suggest" value="true" /><?cs
       /if ?><?cs
 /if ?><?cs # END if/else devsite ?><?cs
 

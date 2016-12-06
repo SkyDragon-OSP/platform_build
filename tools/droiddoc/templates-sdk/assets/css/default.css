@@ -3322,17 +3322,19 @@ table.jd-tagtable th {
   display: none;
 }
 
-/* offset the empty <a name=""> tags to account for sticky nav */
-body.reference a[name]:not(.nav-start-marker):empty {
+/* offset the <a name=""> tags to account for sticky nav */
+body.reference a[name]:not(.nav-start-marker) {
   visibility: hidden;
   display: block;
   position: relative;
   top: -56px;
+
 }
 
 .nav-start-marker {
   position: absolute;
 }
+
 
 /* Quicknav */
 .btn-quicknav {

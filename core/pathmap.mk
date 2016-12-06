@@ -121,7 +121,6 @@ FRAMEWORKS_SUPPORT_SUBDIRS := \
         design \
         percent \
         recommendation \
-        transition \
         v7/preference \
         v14/preference \
         v17/preference-leanback \
