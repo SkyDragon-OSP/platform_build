@@ -2053,7 +2053,13 @@ $(hide) if [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq ] ; the
     -extdirs "" -d $(PRIVATE_CLASS_INTERMEDIATES_DIR) \
     $(PRIVATE_JAVACFLAGS) \
     \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq \
-    || ( rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR) ; exit 41 ) \
+    2>$(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr \
+    && ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo ${CL_YLW}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ) \
+    || ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo ${CL_RED}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR); exit 41 ) \
 fi
 $(if $(PRIVATE_JAVA_LAYERS_FILE), $(hide) build/tools/java-layers.py \
     $(PRIVATE_JAVA_LAYERS_FILE) \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq,)
@@ -2129,7 +2135,7 @@ $(call call-jack) \
     $(if $(PRIVATE_RMTYPEDEFS), \
         -D jack.android.remove-typedef="true") \
     $(addprefix --classpath ,$(strip \
-        $(call normalize-path-list,$(PRIVATE_BOOTCLASSPATH_JAVA_LIBRARIES) $(PRIVATE_ALL_JACK_LIBRARIES)))) \
+        $(call normalize-path-list,$(PRIVATE_JACK_SHARED_LIBRARIES)))) \
     $(addprefix --import ,$(call reverse-list,$(PRIVATE_STATIC_JACK_LIBRARIES))) \
     $(if $(PRIVATE_EXTRA_JAR_ARGS),--import-resource $@.res.tmp) \
     -D jack.android.min-api-level=$(PRIVATE_JACK_MIN_SDK_VERSION) \
@@ -2174,7 +2180,7 @@ $(hide) if [ -s $@.java-source-list-uniq ] ; then \
 	    $(strip $(PRIVATE_JACK_FLAGS)) \
 	    $(strip $(PRIVATE_JACK_DEBUG_FLAGS)) \
 	    $(addprefix --classpath ,$(strip \
-	        $(call normalize-path-list,$(call reverse-list,$(PRIVATE_STATIC_JACK_LIBRARIES)) $(PRIVATE_BOOTCLASSPATH_JAVA_LIBRARIES) $(PRIVATE_ALL_JACK_LIBRARIES)))) \
+	        $(call normalize-path-list,$(call reverse-list,$(PRIVATE_STATIC_JACK_LIBRARIES)) $(PRIVATE_JACK_SHARED_LIBRARIES)))) \
 	    -D jack.import.resource.policy=keep-first \
 	    -D jack.android.min-api-level=$(PRIVATE_JACK_MIN_SDK_VERSION) \
 	    -D jack.import.type.policy=keep-first \
@@ -2304,7 +2310,7 @@ $(call call-jack) \
     $(if $(NO_OPTIMIZE_DX), \
         -D jack.dex.optimize="false") \
     $(addprefix --classpath ,$(strip \
-        $(call normalize-path-list,$(PRIVATE_BOOTCLASSPATH_JAVA_LIBRARIES) $(PRIVATE_ALL_JACK_LIBRARIES)))) \
+        $(call normalize-path-list,$(PRIVATE_JACK_SHARED_LIBRARIES)))) \
     $(addprefix --import ,$(call reverse-list,$(PRIVATE_STATIC_JACK_LIBRARIES))) \
     $(if $(PRIVATE_EXTRA_JAR_ARGS),--import-resource $@.res.tmp) \
     -D jack.import.resource.policy=keep-first \
@@ -2423,7 +2429,7 @@ endef
 
 # $(1): the package file.
 define add-dex-to-package-arg
-$(hide) find $(dir $(PRIVATE_DEX_FILE)) -maxdepth 1 -name "classes*.dex" | sort | xargs zip -qjX $(1)
+$(hide) zip -0qj $@ $(dir $(PRIVATE_DEX_FILE))classes*.dex
 endef
 
 # Add java resources added by the current module.
@@ -2663,8 +2669,9 @@ endef
 ###########################################################
 ## Commands to call Proguard
 ###########################################################
-define transform-jar-to-proguard
+@echo ${CL_CYN}"Copying:"${CL_RST}" $@"
 @echo ${CL_GRN}"Proguard:"${CL_RST}" $@"
+define transform-jar-to-proguard
 $(hide) $(PROGUARD) -injars $< -outjars $@ $(PRIVATE_PROGUARD_FLAGS) \
     $(addprefix -injars , $(PRIVATE_EXTRA_INPUT_JAR))
 endef

@@ -5,7 +5,6 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - tapas:     tapas [<App1> <App2> ...] [arm|x86|mips|armv5|arm64|x86_64|mips64] [eng|userdebug|user]
 - croot:     Changes directory to the top of the tree.
 - m:         Makes from the top of the tree.
-- mka:      Builds using SCHED_BATCH on all processors
 - mm:        Builds all of the modules in the current directory, but not their dependencies.
 - mmm:       Builds all of the modules in the supplied directories, but not their dependencies.
              To limit the modules being built use the syntax: mmm dir/:target1,target2.
@@ -21,6 +20,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - sepgrep:   Greps on all local sepolicy files.
 - sgrep:     Greps on all local source files.
 - godir:     Go to the directory containing a file.
+- mka:       Builds using SCHED_BATCH on all processors
 - reposync:  Parallel repo sync using ionice and SCHED_BATCH
 
 Environment options:
@@ -130,14 +130,13 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
-
+    
     if (echo -n $1 | grep -q -e "^aosp_") ; then
        CUSTOM_BUILD=
     else
        CUSTOM_BUILD=$1
     fi
     export CUSTOM_BUILD
-
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
         TARGET_BUILD_TYPE= \
@@ -544,7 +543,7 @@ function print_lunch_menu()
         i=$(($i+1))
     done
 
-    if [ "z${CUSTOM_DEVICES_ONLY}" != "z" ]; then
+	if [ "z${CUSTOM_DEVICES_ONLY}" != "z" ]; then
        echo " "
        echo "... time to mka bacon!!"
     fi
@@ -556,7 +555,7 @@ function brunch()
 {
     breakfast $*
     if [ $? -eq 0 ]; then
-        time mka sd
+        time mka bacon
     else
         echo "No such item in brunch menu. Try 'breakfast'"
         return 1
