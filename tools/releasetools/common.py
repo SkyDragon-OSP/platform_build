@@ -46,7 +46,7 @@ class Options(object):
     self.signapk_shared_library_path = "lib64"   # Relative to search_path
     self.extra_signapk_args = []
     self.java_path = "java"  # Use the one on the path by default.
-    self.java_args = "-Xmx2048m" # JVM Args
+    self.java_args = ["-Xmx2048m"]  # The default JVM args.
     self.public_key_suffix = ".x509.pem"
     self.private_key_suffix = ".pk8"
     # use otatools built boot_signer by default
@@ -582,7 +582,6 @@ def UnzipTemp(filename, pattern=None):
   OPTIONS.tempfiles.append(tmp)
 
   def unzip_to_dir(filename, dirname):
-    subprocess.call(["rm", "-rf", dirname + filename, "targetfiles-*"])
     cmd = ["unzip", "-o", "-q", filename, "-d", dirname]
     if pattern is not None:
       cmd.append(pattern)
@@ -1515,7 +1514,8 @@ class BlockDifference(object):
       script.AppendExtra('if range_sha1("%s", "%s") == "%s" then' % (
                          self.device, ranges_str,
                          self._HashZeroBlocks(self.tgt.extended.size())))
-      script.Print('Verified the updated %s image.' % (partition,))
+      script.Print(" ")
+      script.Print("Verified..")
       if partition == "system":
         code = ErrorCode.SYSTEM_NONZERO_CONTENTS
       else:
@@ -1526,8 +1526,8 @@ class BlockDifference(object):
           'OTA update");\n'
           'endif;' % (code, partition))
     else:
-      script.Print(" ")	
-      script.Print("Verified SkyDragon System files...")
+      script.Print(" ")
+      script.Print("Verified..")
     script.AppendExtra(
         'else\n'
         '  abort("E%d: %s partition has unexpected contents after OTA '

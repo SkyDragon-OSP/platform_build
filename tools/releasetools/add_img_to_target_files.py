@@ -87,7 +87,7 @@ def GetCareMap(which, imgname):
 
 def AddSystem(output_zip, prefix="IMAGES/", recovery_img=None, boot_img=None):
   """Turn the contents of SYSTEM into a system image and store it in
-  output_zip."""
+  output_zip. Returns the name of the system image file."""
 
   prebuilt_path = os.path.join(OPTIONS.input_tmp, prefix, "system.img")
   if os.path.exists(prebuilt_path):
