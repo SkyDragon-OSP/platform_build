@@ -38,6 +38,8 @@ STRICT_CLANG_LEVEL :=
 
 GCC_ONLY := \
 	-DNDDEBUG -pipe \
+	-funroll-loops -funswitch-loops \
+	-fgcse -fgcse-lm -fgcse-sm -fgcse-las -fgcse-after-reload \
 	-fno-align-functions -fno-align-jumps -fno-align-loops -fno-align-labels
 
 ############
@@ -51,12 +53,6 @@ LOCAL_DISABLE_GRAPHITE := \
 GRAPHITE_FLAGS := \
 	-fgraphite \
 	-fgraphite-identity \
-	-floop-flatten \
-	-floop-parallelize-all \
-	-ftree-loop-linear \
-	-floop-interchange \
-	-floop-strip-mine \
-	-floop-block \
 	-floop-nest-optimize
 
 #########
@@ -91,28 +87,48 @@ DISABLE_POLLY_O3 := \
 	net_hci \
 	net_test_btcore \
 	net_test_device \
-	net_test_osi \
+	net_test_osi
 
 # Disable modules that dont work with Polly. Split up by arch.
-DISABLE_POLLY_arm := \
-	libandroid \
+DISABLE_POLLY_arm :=  \
+	libavcdec \
+	libavcenc \
 	libcrypto \
-        libcrypto_static \
+    libcrypto_static \
+	libcryptfslollipop \
+	libdng_sdk \
+	libF77blas \
+	libFFTEm \
 	libFraunhoferAAC \
+	libjni_filtershow \
+	libjni_filtershow_filters \
 	libjpeg_static \
-	libLLVM% \
+	libLLVMCodeGen \
+	libLLVMSupport \
+	libmedia_jni \
+	libmpeg2dec \
+	libbnnmlowp \
 	libopus \
-	libpdfium% \
+	libpdfiumfpdfapi \
+	libpdfiumfxge \
+	libpdfiumjpeg \
+	librsjni \
+	libRSCpuRef \
+	libscrypttwrp_static \
 	libskia_static \
+	libsonic \
 	libstagefright% \
+	libvpx \
+	libwebp-decode \
+	libwebp-encode \
+	libwebrtc% \
+	libyuv_static
 
 DISABLE_POLLY_arm64 := \
 	$(DISABLE_POLLY_arm) \
 	libaudioutils \
-	libmedia_jni \
-	libRSCpuRef \
 	libscrypt_static \
-	libsvoxpico \
+	libsvoxpico
 
 # Set DISABLE_POLLY based on arch
 LOCAL_DISABLE_POLLY := \
