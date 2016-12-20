@@ -21,8 +21,6 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - sgrep:     Greps on all local source files.
 - godir:     Go to the directory containing a file.
 - pushboot:Push a file from your OUT dir to your phone and reboots it, using absolute path.
-- mka:       Builds using SCHED_BATCH on all processors
-- reposync:  Parallel repo sync using ionice and SCHED_BATCH
 
 Environment options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
@@ -1579,7 +1577,7 @@ function mka() {
             make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
             ;;
         *)
-            mk_timer schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
             ;;
     esac
 }
@@ -1600,17 +1598,6 @@ function fixup_common_out_dir() {
         [ -L ${common_out_dir} ] && rm ${common_out_dir}
         mkdir -p ${common_out_dir}
     fi
-}
-
-function reposync() {
-    case `uname -s` in
-        Darwin)
-            repo sync -j 4 "$@"
-            ;;
-        *)
-            schedtool -B -n 1 -e ionice -n 1 `which repo` sync -j 4 "$@"
-            ;;
-    esac
 }
 
 # Force JAVA_HOME to point to java 1.7/1.8 if it isn't already set.
@@ -1678,10 +1665,10 @@ function get_make_command()
   echo command make
 }
 
-function mk_timer()
+function make()
 {
     local start_time=$(date +"%s")
-    $@
+    $(get_make_command) "$@"
     local ret=$?
     local end_time=$(date +"%s")
     local tdiff=$(($end_time-$start_time))
@@ -1714,11 +1701,6 @@ function mk_timer()
     echo " ####${color_reset}"
     echo
     return $ret
-}
-
-function make()
-{
-    mk_timer $(get_make_command) "$@"
 }
 
 function provision()

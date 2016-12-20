@@ -74,7 +74,7 @@ TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 TARGET_GLOBAL_CFLAGS += \
     -fno-strict-aliasing \
 
-TARGET_GLOBAL_CFLAGS += -DNDEBUG -pipe \
+TARGET_GLOBAL_CFLAGS += \
 			-fstack-protector-strong \
 			-ffunction-sections \
 			-fdata-sections \
@@ -127,8 +127,8 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
-			-DNDEBUG -pipe -funit-at-a-time \
-			-O2 \
+			-DNDEBUG \
+			-O2 -g \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
