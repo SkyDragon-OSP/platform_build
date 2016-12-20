@@ -207,7 +207,6 @@ $(info $(space))
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)https://source.android.com/source/initializing.html)
 $(info ************************************************************)
-$(error stop)
 endif
 
 # Check for the current JDK.
@@ -228,7 +227,6 @@ $(info ************************************************************)
 $(info You asked for an OpenJDK based build but your version is)
 $(info $(java_version_str).)
 $(info ************************************************************)
-$(error stop)
 endif # java version is not OpenJdk
 else # if requires_openjdk
 ifneq ($(shell echo '$(java_version_str)' | grep -i openjdk),)
@@ -239,7 +237,6 @@ $(info You use OpenJDK but only Sun/Oracle JDK is supported.)
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)https://source.android.com/source/download.html)
 $(info ************************************************************)
-$(error stop)
 endif # java version is not Sun Oracle JDK
 endif # if requires_openjdk
 
@@ -266,7 +263,6 @@ $(info $(space))
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)https://source.android.com/source/download.html)
 $(info ************************************************************)
-$(error stop)
 endif
 
 endif # if JAVA_NOT_REQUIRED
@@ -388,8 +384,9 @@ endif
 
 ## user/userdebug ##
 
-user_variant := $(filter user userdebug,$(TARGET_BUILD_VARIANT))
+user_variant := $(filter eng user userdebug,$(TARGET_BUILD_VARIANT))
 enable_target_debugging := true
+WITH_DEXPREOPT := false
 tags_to_install :=
 ifneq (,$(user_variant))
   # Target is secure in user builds.
@@ -413,11 +410,11 @@ ifneq (,$(user_variant))
 
 else # !user_variant
   # Turn on checkjni for non-user builds.
-  ADDITIONAL_BUILD_PROPERTIES += ro.kernel.android.checkjni=1
+  ADDITIONAL_BUILD_PROPERTIES += ro.kernel.android.checkjni=0
   # Set device insecure for non-user builds.
   ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0
   # Allow mock locations by default for non user builds
-  ADDITIONAL_DEFAULT_PROPERTIES += ro.allow.mock.location=1
+  ADDITIONAL_DEFAULT_PROPERTIES += ro.allow.mock.location=0
 endif # !user_variant
 
 ifeq (true,$(strip $(enable_target_debugging)))
@@ -435,7 +432,8 @@ endif # !enable_target_debugging
 ## eng ##
 
 ifeq ($(TARGET_BUILD_VARIANT),eng)
-tags_to_install := debug eng
+tags_to_install :=
+WITH_DEXPREOPT := false
 ifneq ($(filter ro.setupwizard.mode=ENABLED, $(call collapse-pairs, $(ADDITIONAL_BUILD_PROPERTIES))),)
   # Don't require the setup wizard on eng builds
   ADDITIONAL_BUILD_PROPERTIES := $(filter-out ro.setupwizard.mode=%,\
@@ -462,7 +460,7 @@ endif
 
 # TODO: this should be eng I think.  Since the sdk is built from the eng
 # variant.
-tags_to_install := debug eng
+tags_to_install := eng
 ADDITIONAL_BUILD_PROPERTIES += xmpp.auto-presence=true
 ADDITIONAL_BUILD_PROPERTIES += ro.config.nocheckin=yes
 else # !sdk
@@ -1089,10 +1087,10 @@ target-java-tests : java-target-tests
 target-native-tests : native-target-tests
 tests : host-tests target-tests
 
-# To catch more build breakage, check build tests modules in eng and userdebug builds.
+# To catch more build breakage, check build tests modules in userdebug builds.
 ifneq ($(ANDROID_NO_TEST_CHECK),true)
 ifneq ($(TARGET_BUILD_PDK),true)
-ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
+ifneq ($(filter userdebug,$(TARGET_BUILD_VARIANT)),)
 droidcore : target-tests host-tests
 endif
 endif

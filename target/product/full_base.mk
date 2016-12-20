@@ -21,41 +21,22 @@
 
 PRODUCT_PACKAGES := \
     libfwdlockengine \
-    OpenWnn \
-    libWnnEngDic \
-    libWnnJpnDic \
-    libwnndict \
     WAPPushManager
 
-ifneq ($(TARGET_EXCLUDE_LIVEWALLPAPERS), true)
-PRODUCT_PACKAGES += \
-    Galaxy4 \
-    HoloSpiralWallpaper \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    MagicSmokeWallpapers \
-    NoiseField \
-    PhaseBeam \
-    PhotoTable
-else
 PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     PhotoTable
-endif
 
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
-    ro.config.ringtone=Ring_Synth_04.ogg \
-    ro.config.notification_sound=pixiedust.ogg
+    ro.config.ringtone=Titania.ogg \
+    ro.config.notification_sound=Tethys.ogg
 
 # Put en_US first in the list, so make it default.
 PRODUCT_LOCALES := en_US
 
 # Get some sounds
-$(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
-
-# Get the TTS language packs
-$(call inherit-product-if-exists, external/svox/pico/lang/all_pico_languages.mk)
+$(call inherit-product-if-exists, frameworks/base/data/sounds/GoogleAudio.mk)
 
 # Get a list of languages.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/locales_full.mk)

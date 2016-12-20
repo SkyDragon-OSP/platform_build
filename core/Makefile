@@ -171,13 +171,13 @@ ifeq ($(TARGET_BUILD_VARIANT),user)
 
   # Dev. branches should have DISPLAY_BUILD_NUMBER set
   ifeq "true" "$(DISPLAY_BUILD_NUMBER)"
-    BUILD_DISPLAY_ID := $(BUILD_ID).$(BUILD_NUMBER_FROM_FILE) $(BUILD_KEYS)
+    BUILD_DISPLAY_ID := $(BUILD_ID)
   else
-    BUILD_DISPLAY_ID := $(BUILD_ID) $(BUILD_KEYS)
+    BUILD_DISPLAY_ID := $(BUILD_ID)
   endif
 else
   # Non-user builds should show detailed build information
-  BUILD_DISPLAY_ID := $(build_desc)
+  BUILD_DISPLAY_ID := $(BUILD_ID)
 endif
 
 # Accepts a whitespace separated list of product locales such as
@@ -287,17 +287,17 @@ endif
 # vendor build.prop
 #
 # For verifying that the vendor build is what we thing it is
-ifdef BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE
-INSTALLED_VENDOR_BUILD_PROP_TARGET := $(TARGET_OUT_VENDOR)/build.prop
-ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_VENDOR_BUILD_PROP_TARGET)
-$(INSTALLED_VENDOR_BUILD_PROP_TARGET): $(INSTALLED_BUILD_PROP_TARGET)
-	@echo Target vendor buildinfo: $@
-	@mkdir -p $(dir $@)
-	$(hide) echo > $@
-	$(hide) echo ro.vendor.build.date=`$(DATE_FROM_FILE)`>>$@
-	$(hide) echo ro.vendor.build.date.utc=`$(DATE_FROM_FILE) +%s`>>$@
-	$(hide) echo ro.vendor.build.fingerprint="$(BUILD_FINGERPRINT_FROM_FILE)">>$@
-endif
+# ifdef BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE
+# INSTALLED_VENDOR_BUILD_PROP_TARGET := $(TARGET_OUT_VENDOR)/build.prop
+# ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_VENDOR_BUILD_PROP_TARGET)
+# $(INSTALLED_VENDOR_BUILD_PROP_TARGET): $(INSTALLED_BUILD_PROP_TARGET)
+#	@echo Target vendor buildinfo: $@
+#	@mkdir -p $(dir $@)
+#	$(hide) echo > $@
+#	$(hide) echo ro.vendor.build.date=`$(DATE_FROM_FILE)`>>$@
+#	$(hide) echo ro.vendor.build.date.utc=`$(DATE_FROM_FILE) +%s`>>$@
+#	$(hide) echo ro.vendor.build.fingerprint="$(BUILD_FINGERPRINT_FROM_FILE)">>$@
+# endif
 
 # ----------------------------------------------------------------
 
@@ -2029,7 +2029,7 @@ name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   name := $(name)_debug
 endif
-name := $(name)-ota-$(FILE_NAME_TAG)
+name := $(name)-$(shell date +"%Y%m%d-%H%mm")
 
 INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
@@ -2038,7 +2038,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 ifneq ($(CUSTOM_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 else
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 endif
 
 ifneq ($(TARGET_UNIFIED_DEVICE),)
