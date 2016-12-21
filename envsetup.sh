@@ -21,6 +21,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - sgrep:     Greps on all local source files.
 - godir:     Go to the directory containing a file.
 - pushboot:Push a file from your OUT dir to your phone and reboots it, using absolute path.
+- reposync:  Parallel repo sync using ionice and SCHED_BATCH
 
 Environment options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
@@ -513,14 +514,6 @@ function add_lunch_combo()
     done
     LUNCH_MENU_CHOICES=(${LUNCH_MENU_CHOICES[@]} $new_combo)
 }
-
-# add the default one here
-add_lunch_combo aosp_arm-eng
-add_lunch_combo aosp_arm64-eng
-add_lunch_combo aosp_mips-eng
-add_lunch_combo aosp_mips64-eng
-add_lunch_combo aosp_x86-eng
-add_lunch_combo aosp_x86_64-eng
 
 function print_lunch_menu()
 {
@@ -1598,6 +1591,17 @@ function fixup_common_out_dir() {
         [ -L ${common_out_dir} ] && rm ${common_out_dir}
         mkdir -p ${common_out_dir}
     fi
+}
+
+function reposync() {
+    case `uname -s` in
+        Darwin)
+            repo sync -j 4 "$@"
+            ;;
+        *)
+            schedtool -B -n 1 -e ionice -n 1 `which repo` sync -j 4 "$@"
+            ;;
+    esac
 }
 
 # Force JAVA_HOME to point to java 1.7/1.8 if it isn't already set.

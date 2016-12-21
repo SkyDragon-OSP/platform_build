@@ -284,21 +284,21 @@ endif
 ## Please note that we will do option filtering during FDO build.
 ## i.e. Os->O2, remove -fno-early-inline and -finline-limit.
 ##################################################################
-my_fdo_build :=
-ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
-  ifeq ($(BUILD_FDO_INSTRUMENT),true)
-    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_CFLAGS)
-    my_ldflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_LDFLAGS)
-    my_fdo_build := true
-  else ifneq ($(filter true,$(BUILD_FDO_OPTIMIZE))$(filter always,$(LOCAL_FDO_SUPPORT)),)
-    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_OPTIMIZE_CFLAGS)
-    my_fdo_build := true
-  endif
-  # Disable ccache (or other compiler wrapper) except gomacc, which
-  # can handle -fprofile-use properly.
-  my_cc_wrapper := $(filter $(GOMA_CC),$(my_cc_wrapper))
-  my_cxx_wrapper := $(filter $(GOMA_CC),$(my_cxx_wrapper))
-endif
+#my_fdo_build :=
+#ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
+#  ifeq ($(BUILD_FDO_INSTRUMENT),true)
+#    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_CFLAGS)
+#    my_ldflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_LDFLAGS)
+#    my_fdo_build := true
+#  else ifneq ($(filter true,$(BUILD_FDO_OPTIMIZE))$(filter always,$(LOCAL_FDO_SUPPORT)),)
+#    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_OPTIMIZE_CFLAGS)
+#    my_fdo_build := true
+#  endif
+#  # Disable ccache (or other compiler wrapper) except gomacc, which
+#  # can handle -fprofile-use properly.
+#  my_cc_wrapper := $(filter $(GOMA_CC),$(my_cc_wrapper))
+#  my_cxx_wrapper := $(filter $(GOMA_CC),$(my_cxx_wrapper))
+#endif
 
 ###########################################################
 ## Explicitly declare assembly-only __ASSEMBLY__ macro for
@@ -576,7 +576,7 @@ endif
 
 # Turn on all warnings and warnings as errors for RS compiles.
 # This can be disabled with LOCAL_RENDERSCRIPT_FLAGS := -Wno-error
-renderscript_flags := -Wall -Werror
+# renderscript_flags := -Wall -Werror
 renderscript_flags += $(LOCAL_RENDERSCRIPT_FLAGS)
 # -m32 or -m64
 renderscript_flags += -m$(my_32_64_bit_suffix)
