@@ -303,18 +303,18 @@ endif
 ## Please note that we will do option filtering during FDO build.
 ## i.e. Os->O2, remove -fno-early-inline and -finline-limit.
 ##################################################################
-my_fdo_build :=
-ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
-  ifeq ($(BUILD_FDO_INSTRUMENT),true)
-    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_CFLAGS)
-    my_ldflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_LDFLAGS)
-    my_fdo_build := true
-  else ifneq ($(filter true,$(BUILD_FDO_OPTIMIZE))$(filter always,$(LOCAL_FDO_SUPPORT)),)
-    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_OPTIMIZE_CFLAGS)
-    my_fdo_build := true
-  endif
-  # Disable ccache (or other compiler wrapper) except gomacc, unless
-  # it can handle -fprofile-use properly.
+#my_fdo_build :=
+#ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
+#  ifeq ($(BUILD_FDO_INSTRUMENT),true)
+#    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_CFLAGS)
+#    my_ldflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_INSTRUMENT_LDFLAGS)
+#    my_fdo_build := true
+#  else ifneq ($(filter true,$(BUILD_FDO_OPTIMIZE))$(filter always,$(LOCAL_FDO_SUPPORT)),)
+#    my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_OPTIMIZE_CFLAGS)
+#    my_fdo_build := true
+#  endif
+#  # Disable ccache (or other compiler wrapper) except gomacc, which
+#  # can handle -fprofile-use properly.
 
   # ccache supports -fprofile-use as of version 3.2. Parse the version output
   # of each wrapper to determine if it's ccache 3.2 or newer.
@@ -339,7 +339,6 @@ ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
   ifneq ($(cxx_ccache_ge_3_2),true)
     my_cxx_wrapper := $(filter $(GOMA_CC),$(my_cxx_wrapper))
   endif
-endif
 
 ###########################################################
 ## Explicitly declare assembly-only __ASSEMBLY__ macro for
