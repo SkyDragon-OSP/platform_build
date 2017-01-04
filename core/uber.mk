@@ -141,9 +141,9 @@ my_cflags := $(filter-out -Wall -Werror -g -Wextra -Weverything,$(my_cflags))
 ifneq (1,$(words $(filter $(DISABLE_POLLY_O3),$(LOCAL_MODULE))))
   # Remove all other "O" flags to set O3
   my_cflags := $(filter-out -O3 -O2 -Os -O1 -O0 -Og -Oz,$(my_cflags))
-  my_cflags += -O3
+  my_cflags += -Os
 else
-  my_cflags += -O2
+  my_cflags += -Os
 endif
 
 ifeq ($(my_sdclang), true)

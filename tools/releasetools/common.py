@@ -482,7 +482,63 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     img_unsigned = tempfile.NamedTemporaryFile()
     cmd.extend(["--output", img_unsigned.name])
   else:
-    cmd.extend(["--output", img.name])
+    # use MKBOOTIMG from environ, or "mkbootimg" if empty or not set
+    mkbootimg = os.getenv('MKBOOTIMG') or "mkbootimg"
+
+    cmd = [mkbootimg, "--kernel", os.path.join(sourcedir, "kernel")]
+
+    fn = os.path.join(sourcedir, "second")
+    if os.access(fn, os.F_OK):
+      cmd.append("--second")
+      cmd.append(fn)
+
+    fn = os.path.join(sourcedir, "cmdline")
+    if os.access(fn, os.F_OK):
+      cmd.append("--cmdline")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    fn = os.path.join(sourcedir, "base")
+    if os.access(fn, os.F_OK):
+      cmd.append("--base")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    fn = os.path.join(sourcedir, "tagsaddr")
+    if os.access(fn, os.F_OK):
+      cmd.append("--tags-addr")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    fn = os.path.join(sourcedir, "ramdisk_offset")
+    if os.access(fn, os.F_OK):
+      cmd.append("--ramdisk_offset")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    fn = os.path.join(sourcedir, "dt")
+    if os.access(fn, os.F_OK):
+      cmd.append("--dt")
+      cmd.append(fn)
+
+    fn = os.path.join(sourcedir, "pagesize")
+    if os.access(fn, os.F_OK):
+      cmd.append("--pagesize")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    args = info_dict.get("mkbootimg_args", None)
+    if args and args.strip():
+      cmd.extend(shlex.split(args))
+
+    args = info_dict.get("mkbootimg_version_args", None)
+    if args and args.strip():
+      cmd.extend(shlex.split(args))
+
+    if has_ramdisk:
+      cmd.extend(["--ramdisk", ramdisk_img.name])
+
+    img_unsigned = None
+    if info_dict.get("vboot", None):
+      img_unsigned = tempfile.NamedTemporaryFile()
+      cmd.extend(["--output", img_unsigned.name])
+    else:
+      cmd.extend(["--output", img.name])
 
   p = Run(cmd, stdout=subprocess.PIPE)
   p.communicate()
@@ -582,7 +638,6 @@ def UnzipTemp(filename, pattern=None):
   OPTIONS.tempfiles.append(tmp)
 
   def unzip_to_dir(filename, dirname):
-    subprocess.call(["rm", "-rf", dirname + filename, "targetfiles-*"])
     cmd = ["unzip", "-o", "-q", filename, "-d", dirname]
     if pattern is not None:
       cmd.append(pattern)
@@ -1581,13 +1636,16 @@ DataImage = blockimgdiff.DataImage
 
 # map recovery.fstab's fs_types to mount/format "partition types"
 PARTITION_TYPES = {
-    "yaffs2": "MTD",
-    "mtd": "MTD",
+    "bml": "BML",
+    "ext2": "EMMC",
+    "ext3": "EMMC",
     "ext4": "EMMC",
     "emmc": "EMMC",
+    "mtd": "MTD",
     "f2fs": "EMMC",
-    "squashfs": "EMMC"
-}
+    "squashfs": "EMMC",
+    "yaffs2": "MTD",
+    "vfat": "EMMC" }
 
 def GetTypeAndDevice(mount_point, info):
   fstab = info["fstab"]

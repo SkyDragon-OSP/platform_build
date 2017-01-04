@@ -128,7 +128,7 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG -pipe -funit-at-a-time \
-			-O3 \
+			-O2 \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
