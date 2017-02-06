@@ -381,11 +381,13 @@ def AddImagesToTargetFiles(filename):
   if has_system_other:
     banner("system_other")
     AddSystemOther(output_zip)
-  if not OPTIONS.is_signing:
     banner("userdata")
     AddUserdata(output_zip)
     banner("cache")
     AddCache(output_zip)
+  if OPTIONS.info_dict.get("board_bpt_enable", None) == "true":
+    banner("partition-table")
+    AddPartitionTable(output_zip)
 
   # For devices using A/B update, copy over images from RADIO/ to IMAGES/ and
   # make sure we have all the needed images ready under IMAGES/.
